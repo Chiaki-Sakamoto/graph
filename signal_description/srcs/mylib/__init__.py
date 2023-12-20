@@ -1,3 +1,3 @@
 #!/usr/bin/python
 
-from mylib import *
+from .print_env import print_env
