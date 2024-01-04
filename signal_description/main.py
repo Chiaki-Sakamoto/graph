@@ -1,25 +1,41 @@
-#!/usr/bin/python
+#!/usr/bin/python3
+###############################################################################
+#                                            _                                #
+#                                __ _  ___ _(_)__                             #
+#                               /  ' \/ _ `/ / _ \                            #
+#                              /_/_/_/\_,_/_/_//_/                            #
+#                                                                             #
+###############################################################################
 
 import sys
 
 import matplotlib as mpl
-import matplotlib.pyplot as plt
 import signal_description.mylib as mylib
 
 
-class data:
-    pass
+class Env:
+    def __init__(self, argv, rc_file):
+        self.argvs = argv
+        self.rc_file = rc_file
+
+
+class Graph:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+
+class Data:
+    def __init__(self, env, graph):
+        self.env = env
+        self.graph = graph
 
 
 def main():
-    data.args = sys.argv
-    data.rc_file = mpl.matplotlib_fname()
-    print(f"using matplotlibrc : {data.rc_file}")
-    print(f"package:{__package__}")
-    mylib.print_env.print_env(f"using matplotlibrc : {data}")
-    for index, path in enumerate(data.args):
-        if index != 0:
-            print(f"data_path : {path}")
-    plt.plot([1, 2, 3, 4])
-    plt.ylabel('some number')
-    plt.show()
+    data = Data(
+        Env(sys.argv, mpl.matplotlib_fname()),
+        Graph(None, None)
+        )
+    mylib.print_env.print_env(data.env)
+    mylib.print_env.print_argvs(data.env.argvs)
+    mylib.drawing.show_signal_description(data.env, data.graph)

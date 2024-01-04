@@ -365,9 +365,9 @@
 #axes.facecolor:     white   # axes background color
 #axes.edgecolor:     black   # axes edge color
 #axes.linewidth:     0.8     # edge line width
-#axes.grid:          False   # display grid or not
-#axes.grid.axis:     both    # which axis the grid should apply to
-#axes.grid.which:    major   # grid lines at {major, minor, both} ticks
+axes.grid:          True   # display grid or not
+axes.grid.axis:     both    # which axis the grid should apply to
+axes.grid.which:    major   # grid lines at {major, minor, both} ticks
 #axes.titlelocation: center  # alignment of the title: {left, right, center}
 #axes.titlesize:     large   # font size of the axes title
 #axes.titleweight:   normal  # font weight of title
@@ -474,8 +474,8 @@ xtick.top:          True    # draw ticks on the top side
 xtick.bottom:        True    # draw ticks on the bottom side
 #xtick.labeltop:      True   # draw label on the top
 #xtick.labelbottom:   True    # draw label on the bottom
-xtick.major.size:    3.5     # major tick size in points
-xtick.minor.size:    2       # minor tick size in points
+# xtick.major.size:    3.5     # major tick size in points
+# xtick.minor.size:    2       # minor tick size in points
 #xtick.major.width:   0.8     # major tick width in points
 #xtick.minor.width:   0.6     # minor tick width in points
 #xtick.major.pad:     3.5     # distance to major tick label in points
@@ -496,8 +496,8 @@ ytick.left:          True    # draw ticks on the left side
 ytick.right:         True   # draw ticks on the right side
 ytick.labelleft:     True    # draw tick labels on the left side
 #ytick.labelright:    True   # draw tick labels on the right side
-ytick.major.size:    3.5     # major tick size in points
-ytick.minor.size:    2       # minor tick size in points
+# ytick.major.size:    3.5     # major tick size in points
+# ytick.minor.size:    2       # minor tick size in points
 #ytick.major.width:   0.8     # major tick width in points
 #ytick.minor.width:   0.6     # minor tick width in points
 #ytick.major.pad:     3.5     # distance to major tick label in points
@@ -519,9 +519,9 @@ ytick.minor.right:   True    # draw y axis right minor ticks
 ## * GRIDS                                                                   *
 ## ***************************************************************************
 #grid.color:     "#b0b0b0"  # grid color
-#grid.linestyle: -          # solid
+grid.linestyle: --          # solid
 #grid.linewidth: 0.8        # in points
-#grid.alpha:     1.0        # transparency, between 0.0 and 1.0
+grid.alpha:     0.8        # transparency, between 0.0 and 1.0
 
 
 ## ***************************************************************************
@@ -721,7 +721,7 @@ ytick.minor.right:   True    # draw y axis right minor ticks
 ### PDF backend params
 #pdf.compression:    6  # integer from 0 to 9
                         # 0 disables compression (good for debugging)
-#pdf.fonttype:       3  # Output Type 3 (Type3) or Type 42 (TrueType)
+pdf.fonttype:       42  # Output Type 3 (Type3) or Type 42 (TrueType)
 #pdf.use14corefonts: False
 #pdf.inheritcolor:   False
 
