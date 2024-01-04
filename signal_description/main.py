@@ -20,9 +20,10 @@ class Env:
 
 
 class Graph:
-    def __init__(self, x, y):
+    def __init__(self, x, y, title):
         self.x = x
         self.y = y
+        self.title = title
 
 
 class Data:
@@ -34,7 +35,7 @@ class Data:
 def main():
     data = Data(
         Env(sys.argv, mpl.matplotlib_fname()),
-        Graph(None, None)
+        Graph(None, None, None)
         )
     mylib.print_env.print_env(data.env)
     mylib.print_env.print_argvs(data.env.argvs)

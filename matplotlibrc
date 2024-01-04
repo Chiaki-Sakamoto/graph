@@ -560,7 +560,7 @@ grid.alpha:     0.8        # transparency, between 0.0 and 1.0
 #figure.titleweight: normal    # weight of the figure title
 #figure.labelsize:   large     # size of the figure label (``Figure.sup[x|y]label()``)
 #figure.labelweight: normal    # weight of the figure label
-#figure.figsize:     6.4, 4.8  # figure size in inches
+figure.figsize:     15, 10  # figure size in inches
 #figure.dpi:         100       # figure dots per inch
 #figure.facecolor:   white     # figure face color
 #figure.edgecolor:   white     # figure edge color
