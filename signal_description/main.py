@@ -51,6 +51,8 @@ def main():
     mylib.print_env.print_argvs(data.parser.args.data_path)
     if data.parser.args.export:
         mylib.export.export_signal(data.parser, data.graph)
+    elif data.parser.args.angle_distribution:
+        print("plot angle distribution\n")
     else:
         mylib.drawing.show_signal(data.parser, data.graph)
     return EXIT_SUCESS

@@ -8,9 +8,11 @@
 #               /_/                    /_____/                                #
 ###############################################################################
 def print_env(data):
-    print("\nprint_env")
-    print(f"using matplotlibrc : {data.rc_file}")
-    print(f"package : {__package__}\n")
+    print(
+        "\nprint_env"
+        f"using matplotlibrc : {data.rc_file}"
+        f"package : {__package__}\n"
+        )
 
 
 def print_argvs(argv):

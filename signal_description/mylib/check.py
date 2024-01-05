@@ -13,8 +13,8 @@ from .macro import *
 def check_arguments(parser, args):
     nbr_args = len(args)
 
-    if (nbr_args == 0):
+    if nbr_args == 0:
         exit(EXIT_FAILURE)
-    elif (not parser.args.export and nbr_args > 4):
+    elif not parser.args.export and nbr_args > 4:
         print("Error\nAre there too many graphs to display?\n")
         exit(EXIT_FAILURE)

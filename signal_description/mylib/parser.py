@@ -25,7 +25,14 @@ def parser_main(parser):
         help='export pdf option',
         action='store_true',
         )
+    parser.parser.add_argument(
+        '-ad', '--angle_distribution',
+        help='plot angle distribution',
+        action='store_true',
+        )
     parser.args = parser.parser.parse_args()
     if parser.args.export:
         print("export pdf.\n")
+    if parser.args.angle_distribution:
+        print("plot angle distribution\n")
     check.check_arguments(parser, parser.args.data_path)
