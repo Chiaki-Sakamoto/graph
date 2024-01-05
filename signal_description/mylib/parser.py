@@ -30,6 +30,10 @@ def parser_main(parser):
         help='plot angle distribution',
         action='store_true',
         )
+    parser.parser.add_argument(
+        '-o', '--out',
+        help='output directory path',
+        )
     parser.args = parser.parser.parse_args()
     if parser.args.export:
         print("export pdf.\n")

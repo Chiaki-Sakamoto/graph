@@ -9,8 +9,8 @@
 ###############################################################################
 def print_env(data):
     print(
-        "\nprint_env"
-        f"using matplotlibrc : {data.rc_file}"
+        "\nprint_env\n"
+        f"using matplotlibrc : {data.rc_file}\n"
         f"package : {__package__}\n"
         )
 
