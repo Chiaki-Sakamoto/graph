@@ -40,19 +40,27 @@ class Data:
         self.graph = graph
 
 
-def main():
+def init():
     data = Data(
         Env(sys.argv, mpl.matplotlib_fname()),
         Parser(None, None),
         Graph(None, None, None)
         )
+    return data
+
+
+def main():
+    data = init()
     mylib.parser.parser_main(data.parser)
     mylib.print_env.print_env(data.env)
     mylib.print_env.print_argvs(data.parser.args.data_path)
     if data.parser.args.export:
         mylib.export.export_signal(data.parser, data.graph)
     elif data.parser.args.angle_distribution:
-        print("plot angle distribution\n")
+        mylib.angle_distribution.angle_distribution_main(
+            data.parser,
+            data.graph
+            )
     else:
         mylib.drawing.show_signal(data.parser, data.graph)
     return EXIT_SUCESS
