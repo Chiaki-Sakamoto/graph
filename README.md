@@ -10,15 +10,9 @@
 This is a graphing program used in universities.
 
 graph/  
-&emsp;┣ data/  
-&emsp;┃&emsp;┗20231122_yoko/  
 &emsp;┣ signal_description/  
 &emsp;┃  
 &emsp;┗ README.md  
 
-- data/
-    - It is a directory where the results of the experiment are kept.
-- 20231122_yoko/
-    - 2023/11/22 experiment data  
 - signal_description/
     - This is a program that describes a signal.  

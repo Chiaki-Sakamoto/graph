@@ -27,6 +27,12 @@ def export_signal(parser, graph):
         plt.figure()
         plt.plot(graph.x, -graph.y)
         plt.title(graph.title)
-        plt.savefig('/tmp/' + graph.title + '.pdf', format='pdf')
+        if parser.args.output:
+            plt.savefig(
+                parser.args.output + graph.title + '.pdf',
+                format='pdf'
+                )
+        else:
+            plt.savefig('/tmp/' + graph.title + '.pdf', format='pdf')
         print(f"export {graph.title}.pdf\n")
         plt.close()
