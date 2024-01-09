@@ -54,7 +54,7 @@ def main():
     mylib.parser.parser_main(data.parser)
     mylib.print_env.print_env(data.env)
     mylib.print_env.print_argvs(data.parser.args.data_path)
-    if data.parser.args.export:
+    if data.parser.args.export and not data.parser.args.angle_distribution:
         mylib.export.export_signal(data.parser, data.graph)
     elif data.parser.args.angle_distribution:
         mylib.angle_distribution.angle_distribution_main(

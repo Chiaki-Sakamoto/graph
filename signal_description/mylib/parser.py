@@ -40,5 +40,5 @@ def parser_main(parser):
     if parser.args.angle_distribution:
         print("plot angle distribution\n")
     if parser.args.output:
-        check.check_output_path(parser.args.output)
+        check.check_output_path(parser.args.export, parser.args.output)
     check.check_arguments(parser, parser.args.data_path)

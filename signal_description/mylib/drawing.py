@@ -8,17 +8,21 @@
 #                                                  /____/                     #
 ###############################################################################
 from .macro import *
-import os
 import numpy as np
 import matplotlib.pyplot as plt
 from .utils import retrieve_filename
+from .utils import convert_to_scientific_notation
 
 
 def _plot_graph(axs, graph, row, col):
+    x_exponent, x_si_prefix = convert_to_scientific_notation(graph.x)
+    y_exponent, y_si_prefix = convert_to_scientific_notation(graph.y)
     title = graph.title
     print(f"[{row}, {col}]: {graph.title}")
-    axs[row, col].plot(graph.x, -graph.y)
+    axs[row, col].plot(graph.x * 10 ** x_exponent, -graph.y * 10 ** y_exponent)
     axs[row, col].set_title(title)
+    axs[row, col].set_xlabel(f"Time ({x_si_prefix}s)")
+    axs[row, col].set_ylabel(f"Signal Voltage ({y_si_prefix}V)")
 
 
 def _show_single_graph(parser, graph):
@@ -32,10 +36,18 @@ def _show_single_graph(parser, graph):
     graph.x, graph.y = np.loadtxt(
         graph.title, skiprows=3, unpack=True, delimiter=','
         )
+    x_exponent, x_si_prefix = convert_to_scientific_notation(graph.x)
+    y_exponent, y_si_prefix = convert_to_scientific_notation(graph.y)
+    print(
+        f"x_exp: {x_exponent}, x_si_prefix: {x_si_prefix}\n"
+        f"y_exp: {y_exponent}, y_si_prefix: {y_si_prefix}"
+        )
     graph.title = retrieve_filename(graph.title)
     plt.figure()
-    plt.plot(graph.x, -graph.y)
+    plt.plot(graph.x * 10 ** x_exponent, -graph.y * 10 ** y_exponent)
     plt.title(graph.title)
+    plt.xlabel(f"Time ({x_si_prefix}s)")
+    plt.ylabel(f"Signal Voltage ({y_si_prefix}V)")
     print(f"show {graph.title}")
     plt.show()
     plt.close()

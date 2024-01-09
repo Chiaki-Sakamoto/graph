@@ -15,11 +15,11 @@
 import re
 import numpy as np
 import matplotlib.pyplot as plt
+from .utils import convert_to_scientific_notation
 
 
-def angle_distribution_main(parser, graph):
+def _init_angle_distribution(parser):
     angle_distribution = dict()
-    print("plot angle distribution\n")
     for index, path in enumerate(parser.args.data_path):
         if not path.endswith(".txt"):
             print(
@@ -34,7 +34,10 @@ def angle_distribution_main(parser, graph):
             )
         max_signal = -min(signal)
         angle_distribution[angle] = max_signal
+    return angle_distribution
 
+
+def _sort_angle_distribution(angle_distribution):
     sorted_angle_distribution = dict(
         sorted(
             angle_distribution.items(),
@@ -42,13 +45,29 @@ def angle_distribution_main(parser, graph):
             reverse=True
             )
         )
-    graph.x = list(sorted_angle_distribution.keys())
-    graph.y = list(sorted_angle_distribution.values())
+    return sorted_angle_distribution
+
+
+def _print_angle_distribution(graph):
     for index, (x, y) in enumerate(zip(graph.x, graph.y)):
         print(f"Index: {index}, x: {x}, y:{y}")
-    plt.figure()
-    plt.plot(graph.x, graph.y, 'o')
-    # plt.title(graph.title)
-    # print(f"show {graph.title}")
-    plt.show()
+
+
+def angle_distribution_main(parser, graph):
+    print("plot angle distribution\n")
+    angle_distribution = _init_angle_distribution(parser)
+    sorted_angle_distribution = _sort_angle_distribution(angle_distribution)
+    graph.x = list(sorted_angle_distribution.keys())
+    graph.y = list(sorted_angle_distribution.values())
+    y_exponent, y_si_prefix = convert_to_scientific_notation(graph.y)
+    # insert _print_angle_distribution
+    fig, axs = plt.subplots()
+    axs.plot(graph.x, np.array(graph.y) * 10 ** y_exponent, 'o')
+    axs.set_xlabel("Angle (°)")
+    axs.set_ylabel(f"Signal Voltage ({y_si_prefix}V)")
+    if parser.args.export:
+        plt.savefig('/tmp/' + "angle_distribution" + '.pdf', format='pdf')
+        print("export angle_distribution.pdf in /tmp\n")
+    else:
+        plt.show()
     plt.close()

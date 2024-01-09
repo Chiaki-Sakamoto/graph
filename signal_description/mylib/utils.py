@@ -10,7 +10,88 @@
 import os
 
 
+def _judge_positive_power(exponent):
+    if 3 <= exponent and exponent <= 5:
+        return (-3, 'k')
+    elif 6 <= exponent and exponent <= 8:
+        return (-6, 'M')
+    elif 9 <= exponent and exponent <= 11:
+        return (-9, 'G')
+    elif 12 <= exponent and exponent <= 14:
+        return (-12, 'T')
+    elif 15 <= exponent and exponent <= 17:
+        return (-15, 'P')
+    elif 18 <= exponent and exponent <= 20:
+        return (-18, 'E')
+    elif 21 <= exponent and exponent <= 23:
+        return (-21, 'Z')
+    elif 24 <= exponent and exponent <= 26:
+        return (-24, 'Y')
+    else:
+        return (None, None)
+
+
+def _judge_negative_power(exponent):
+    if -3 <= exponent and exponent <= -1:
+        return (3, 'm')
+    elif -6 <= exponent and exponent <= -4:
+        return (6, 'μ')
+    elif -9 <= exponent and exponent <= -7:
+        return (9, 'n')
+    elif -12 <= exponent and exponent <= -10:
+        return (12, 'p')
+    elif -15 <= exponent and exponent <= -11:
+        return (15, 'f')
+    elif -18 <= exponent and exponent <= -12:
+        return (18, 'a')
+    elif -21 <= exponent and exponent <= -19:
+        return (21, 'z')
+    elif -24 <= exponent and exponent <= -22:
+        return (24, 'y')
+    else:
+        return (None, None)
+
+
+def _judge_SI_prefix(exponent):
+    if exponent == 0 or exponent == 1 or exponent == 2:
+        return (None, None)
+    result, si_prefix = _judge_positive_power(exponent)
+    if result:
+        return (result, si_prefix)
+    result, si_prefix = _judge_negative_power(exponent)
+    if result:
+        return (result, si_prefix)
+    print(
+        "Error\n"
+        "unexpected error\n"
+        )
+    return (None, None)
+
+
 def retrieve_filename(path):
     path = path.split('/')[-1]
     result = os.path.splitext(path)[0]
     return result
+
+
+def convert_to_scientific_notation(value_array):
+    exponent_array = list()
+    for index, value in enumerate(value_array):
+        exponent = 0
+        if abs(value) < 1:
+            while abs(value) < 1:
+                value *= 10
+                exponent -= 1
+        elif abs(value) >= 10:
+            while abs(value) >= 10:
+                value /= 10
+                exponent += 1
+        exponent_array.append(exponent)
+    ave_exponent = int(sum(exponent_array)/len(exponent_array))
+    # min_exponent = min(exponent_array)
+    # if abs(ave_exponent - min_exponent) >= 3:
+    #     exponent = ave_exponent
+    # else:
+    #     exponent = min_exponent
+    re_exponent, si_prefix = _judge_SI_prefix(ave_exponent)
+    return (re_exponent, si_prefix)

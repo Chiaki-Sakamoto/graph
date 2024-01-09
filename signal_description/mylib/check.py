@@ -25,7 +25,12 @@ def check_arguments(parser, args):
         exit(EXIT_FAILURE)
 
 
-def check_output_path(path):
+def check_output_path(export_flag, path):
+    if not export_flag:
+        print(
+            "Run it with option -e\n"
+        )
+        exit(EXIT_FAILURE)
     if os.path.isfile(path):
         print(
             "Error\n"
