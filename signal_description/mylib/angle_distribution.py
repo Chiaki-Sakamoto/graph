@@ -16,6 +16,21 @@ import re
 import numpy as np
 import matplotlib.pyplot as plt
 from .utils import convert_to_scientific_notation
+from .utils import normalize
+
+
+def _change_notation(parser, graph):
+    x_exponent, x_si_prefix = convert_to_scientific_notation(graph.x)
+    if parser.args.normalization:
+        graph.y = normalize(graph.y)
+        y_exponent, y_si_prefix = convert_to_scientific_notation(graph.y)
+    else:
+        y_exponent, y_si_prefix = convert_to_scientific_notation(graph.y)
+    print(
+        f"x_exp: {x_exponent}, x_si_prefix: {x_si_prefix}\n"
+        f"y_exp: {y_exponent}, y_si_prefix: {y_si_prefix}"
+        )
+    return x_exponent, x_si_prefix, y_exponent, y_si_prefix
 
 
 def _init_angle_distribution(parser):
@@ -59,10 +74,17 @@ def angle_distribution_main(parser, graph):
     sorted_angle_distribution = _sort_angle_distribution(angle_distribution)
     graph.x = list(sorted_angle_distribution.keys())
     graph.y = list(sorted_angle_distribution.values())
-    y_exponent, y_si_prefix = convert_to_scientific_notation(graph.y)
-    # insert _print_angle_distribution
+    graph.x = np.array(graph.x)
+    graph.y = np.array(graph.y)
+    print(type(graph.y))
+    (x_exponent, x_si_prefix,
+        y_exponent, y_si_prefix) = _change_notation(parser, graph)
+    _print_angle_distribution(graph)
     fig, axs = plt.subplots()
-    axs.plot(graph.x, np.array(graph.y) * 10 ** y_exponent, 'o')
+    axs.plot(
+        graph.x * 10 ** x_exponent,
+        graph.y * 10 ** y_exponent, 'o'
+        )
     axs.set_xlabel("Angle (°)")
     axs.set_ylabel(f"Signal Voltage ({y_si_prefix}V)")
     if parser.args.export:

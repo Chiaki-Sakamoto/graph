@@ -40,10 +40,12 @@ def export_signal(parser, graph):
             path, skiprows=3, unpack=True, delimiter=','
             )
         graph.title = retrieve_filename(path)
-        x_exponent, x_si_prefix = convert_to_scientific_notation(graph.x)
-        y_exponent, y_si_prefix = convert_to_scientific_notation(graph.y)
+        (x_exponent, x_si_prefix,
+            y_exponent, y_si_prefix) = _change_notation(parser, graph)
         fig, axs = plt.subplots()
-        axs.plot(graph.x * 10 ** x_exponent, -graph.y * 10 ** y_exponent)
+        if not parser.args.normalization:
+            graph.y *= -1
+        axs.plot(graph.x * 10 ** x_exponent, graph.y * 10 ** y_exponent)
         axs.set_title(graph.title)
         axs.set_xlabel(f"Time ({x_si_prefix}s)")
         axs.set_ylabel(f"Signal Voltage ({y_si_prefix}V)")

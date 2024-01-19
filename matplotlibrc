@@ -264,7 +264,7 @@ lines.markersize:      12           # marker size, in points
 #font.variant: normal
 #font.weight:  normal
 #font.stretch: normal
-font.size:    26.0
+font.size:    24.0
 
 #font.serif:      DejaVu Serif, Bitstream Vera Serif, Computer Modern Roman, New Century Schoolbook, Century Schoolbook L, Utopia, ITC Bookman, Bookman, Nimbus Roman No9 L, Times New Roman, Times, Palatino, Charter, serif
 #font.sans-serif: DejaVu Sans, Bitstream Vera Sans, Computer Modern Sans Serif, Lucida Grande, Verdana, Geneva, Lucid, Arial, Helvetica, Avant Garde, sans-serif
@@ -384,10 +384,10 @@ axes.labelpad:      4.0     # space between label and axis
                              #     - above patches but below lines ('line')
                              #     - above all (False)
 
-#axes.formatter.limits: -5, 6  # use scientific notation if log10
+# axes.formatter.limits: -3, 3  # use scientific notation if log10
                                # of the axis range is smaller than the
                                # first or larger than the second
-#axes.formatter.use_locale: False  # When True, format tick labels
+# axes.formatter.use_locale: True  # When True, format tick labels
                                    # according to the user's locale.
                                    # For example, use ',' as a decimal
                                    # separator in the fr_FR locale.
@@ -422,7 +422,7 @@ axes.labelpad:      4.0     # space between label and axis
 #axes.xmargin:   .05  # x margin.  See `axes.Axes.margins`
 #axes.ymargin:   .05  # y margin.  See `axes.Axes.margins`
 #axes.zmargin:   .05  # z margin.  See `axes.Axes.margins`
-#axes.autolimit_mode: data  # If "data", use axes.xmargin and axes.ymargin as is.
+axes.autolimit_mode: round_numbers  # If "data", use axes.xmargin and axes.ymargin as is.
                             # If "round_numbers", after application of margins, axis
                             # limits are further expanded to the nearest "round" number.
 #polaraxes.grid: True  # display grid on polar axes
@@ -560,7 +560,7 @@ grid.alpha:     0.8        # transparency, between 0.0 and 1.0
 #figure.titleweight: normal    # weight of the figure title
 #figure.labelsize:   large     # size of the figure label (``Figure.sup[x|y]label()``)
 #figure.labelweight: normal    # weight of the figure label
-figure.figsize:     15, 10  # figure size in inches
+figure.figsize:     15, 15  # figure size in inches
 #figure.dpi:         100       # figure dots per inch
 #figure.facecolor:   white     # figure face color
 #figure.edgecolor:   white     # figure edge color

@@ -10,8 +10,10 @@
 
 EXIT_SUCESS = 0
 EXIT_FAILURE = 1
+SPACE = "    "
 
 __all__ = [
     'EXIT_SUCESS',
     'EXIT_FAILURE',
+    'SPACE'
     ]

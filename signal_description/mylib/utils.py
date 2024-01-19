@@ -78,6 +78,8 @@ def convert_to_scientific_notation(value_array):
     exponent_array = list()
     for index, value in enumerate(value_array):
         exponent = 0
+        if (value == 0):
+            continue
         if abs(value) < 1:
             while abs(value) < 1:
                 value *= 10
@@ -100,4 +102,4 @@ def normalize(value_array):
         max_value = min(value_array)
     for index, value in enumerate(value_array):
         value_array[index] = value / max_value
-    return -value_array
+    return value_array

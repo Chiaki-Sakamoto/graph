@@ -36,14 +36,16 @@ def _change_notation(parser, graph):
     return x_exponent, x_si_prefix, y_exponent, y_si_prefix
 
 
-def _plot_graph(parser, axs, row, col):
-    x_exponent, x_si_prefix, \
-        y_exponent, y_si_prefix = _change_notation(parser, parser.graph)
-    title = parser.graph.title
-    print(f"[{row}, {col}]: {parser.graph.title}")
+def _plot_graph(parser, axs, row, col, graph):
+    (x_exponent, x_si_prefix,
+        y_exponent, y_si_prefix) = _change_notation(parser, graph)
+    title = graph.title[:15] + '\n' + SPACE + graph.title[15:]
+    print(f"[{row}, {col}]: {graph.title}")
+    if not parser.args.normalization:
+        graph.y *= -1
     axs[row, col].plot(
-        parser.graph.x * 10 ** x_exponent,
-        -parser.graph.y * 10 ** y_exponent
+        graph.x * 10 ** x_exponent,
+        graph.y * 10 ** y_exponent
         )
     axs[row, col].set_title(title)
     axs[row, col].set_xlabel(f"Time ({x_si_prefix}s)")
@@ -61,11 +63,13 @@ def _show_single_graph(parser, graph):
     graph.x, graph.y = np.loadtxt(
         graph.title, skiprows=3, unpack=True, delimiter=','
         )
-    x_exponent, x_si_prefix, \
-        y_exponent, y_si_prefix = _change_notation(parser, graph)
+    (x_exponent, x_si_prefix,
+        y_exponent, y_si_prefix) = _change_notation(parser, graph)
     graph.title = retrieve_filename(graph.title)
     plt.figure()
-    plt.plot(graph.x * 10 ** x_exponent, -graph.y * 10 ** y_exponent)
+    if not parser.args.normalization:
+        graph.y *= -1
+    plt.plot(graph.x * 10 ** x_exponent, graph.y * 10 ** y_exponent)
     plt.title(graph.title)
     plt.xlabel(f"Time ({x_si_prefix}s)")
     _judge_norm_ylabel(parser.args.normalization, y_si_prefix)
@@ -88,9 +92,9 @@ def _show_multi_graphs(parser, graph):
             )
         graph.title = retrieve_filename(path)
         if index < 2:
-            _plot_graph(parser, axs, 0, index)
+            _plot_graph(parser, axs, 0, index, graph)
         elif index > 1:
-            _plot_graph(parser, axs, 1, index - 2)
+            _plot_graph(parser, axs, 1, index - 2, graph)
     plt.show()
 
 
