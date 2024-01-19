@@ -32,7 +32,7 @@ def _judge_positive_power(exponent):
 
 
 def _judge_negative_power(exponent):
-    if -3 <= exponent and exponent <= -1:
+    if -3 <= exponent and exponent <= -2:
         return (3, 'm')
     elif -6 <= exponent and exponent <= -4:
         return (6, 'μ')
@@ -53,8 +53,8 @@ def _judge_negative_power(exponent):
 
 
 def _judge_SI_prefix(exponent):
-    if exponent == 0 or exponent == 1 or exponent == 2:
-        return (None, None)
+    if exponent == 0 or exponent == -1 or exponent == 1 or exponent == 2:
+        return (0, None)
     result, si_prefix = _judge_positive_power(exponent)
     if result:
         return (result, si_prefix)
@@ -88,10 +88,16 @@ def convert_to_scientific_notation(value_array):
                 exponent += 1
         exponent_array.append(exponent)
     ave_exponent = int(sum(exponent_array)/len(exponent_array))
-    # min_exponent = min(exponent_array)
-    # if abs(ave_exponent - min_exponent) >= 3:
-    #     exponent = ave_exponent
-    # else:
-    #     exponent = min_exponent
-    re_exponent, si_prefix = _judge_SI_prefix(ave_exponent)
-    return (re_exponent, si_prefix)
+    print(f"ave_exponent: {ave_exponent}")
+    result_exponent, si_prefix = _judge_SI_prefix(ave_exponent)
+    return (result_exponent, si_prefix)
+
+
+def normalize(value_array):
+    if abs(max(value_array)) >= abs(min(value_array)):
+        max_value = max(value_array)
+    else:
+        max_value = min(value_array)
+    for index, value in enumerate(value_array):
+        value_array[index] = value / max_value
+    return -value_array

@@ -12,14 +12,39 @@ import numpy as np
 import matplotlib.pyplot as plt
 from .utils import retrieve_filename
 from .utils import convert_to_scientific_notation
+from .utils import normalize
 
 
-def _plot_graph(axs, graph, row, col):
+def _judge_norm_ylabel(norm_flag, y_si_prefix):
+    if norm_flag:
+        plt.ylabel("Signal Voltage (arb.units)")
+    else:
+        plt.ylabel(f"Signal Voltage ({y_si_prefix}V)")
+
+
+def _change_notation(parser, graph):
     x_exponent, x_si_prefix = convert_to_scientific_notation(graph.x)
-    y_exponent, y_si_prefix = convert_to_scientific_notation(graph.y)
-    title = graph.title
-    print(f"[{row}, {col}]: {graph.title}")
-    axs[row, col].plot(graph.x * 10 ** x_exponent, -graph.y * 10 ** y_exponent)
+    if parser.args.normalization:
+        graph.y = normalize(graph.y)
+        y_exponent, y_si_prefix = convert_to_scientific_notation(graph.y)
+    else:
+        y_exponent, y_si_prefix = convert_to_scientific_notation(graph.y)
+    print(
+        f"x_exp: {x_exponent}, x_si_prefix: {x_si_prefix}\n"
+        f"y_exp: {y_exponent}, y_si_prefix: {y_si_prefix}"
+        )
+    return x_exponent, x_si_prefix, y_exponent, y_si_prefix
+
+
+def _plot_graph(parser, axs, row, col):
+    x_exponent, x_si_prefix, \
+        y_exponent, y_si_prefix = _change_notation(parser, parser.graph)
+    title = parser.graph.title
+    print(f"[{row}, {col}]: {parser.graph.title}")
+    axs[row, col].plot(
+        parser.graph.x * 10 ** x_exponent,
+        -parser.graph.y * 10 ** y_exponent
+        )
     axs[row, col].set_title(title)
     axs[row, col].set_xlabel(f"Time ({x_si_prefix}s)")
     axs[row, col].set_ylabel(f"Signal Voltage ({y_si_prefix}V)")
@@ -36,18 +61,14 @@ def _show_single_graph(parser, graph):
     graph.x, graph.y = np.loadtxt(
         graph.title, skiprows=3, unpack=True, delimiter=','
         )
-    x_exponent, x_si_prefix = convert_to_scientific_notation(graph.x)
-    y_exponent, y_si_prefix = convert_to_scientific_notation(graph.y)
-    print(
-        f"x_exp: {x_exponent}, x_si_prefix: {x_si_prefix}\n"
-        f"y_exp: {y_exponent}, y_si_prefix: {y_si_prefix}"
-        )
+    x_exponent, x_si_prefix, \
+        y_exponent, y_si_prefix = _change_notation(parser, graph)
     graph.title = retrieve_filename(graph.title)
     plt.figure()
     plt.plot(graph.x * 10 ** x_exponent, -graph.y * 10 ** y_exponent)
     plt.title(graph.title)
     plt.xlabel(f"Time ({x_si_prefix}s)")
-    plt.ylabel(f"Signal Voltage ({y_si_prefix}V)")
+    _judge_norm_ylabel(parser.args.normalization, y_si_prefix)
     print(f"show {graph.title}")
     plt.show()
     plt.close()
@@ -67,9 +88,9 @@ def _show_multi_graphs(parser, graph):
             )
         graph.title = retrieve_filename(path)
         if index < 2:
-            _plot_graph(axs, graph, 0, index)
+            _plot_graph(parser, axs, 0, index)
         elif index > 1:
-            _plot_graph(axs, graph, 1, index - 2)
+            _plot_graph(parser, axs, 1, index - 2)
     plt.show()
 
 
