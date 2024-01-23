@@ -79,7 +79,7 @@ def angle_distribution_main(parser, graph):
     print(type(graph.y))
     (x_exponent, x_si_prefix,
         y_exponent, y_si_prefix) = _change_notation(parser, graph)
-    _print_angle_distribution(graph)
+    # _print_angle_distribution(graph)
     fig, axs = plt.subplots()
     axs.plot(
         graph.x * 10 ** x_exponent,

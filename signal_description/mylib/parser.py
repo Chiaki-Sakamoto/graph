@@ -46,7 +46,27 @@ def parser_main(parser):
     )
     parser.parser.add_argument(
         '-add', '--add',
-        help='add the graph',
+        help='add the graph.',
+    )
+    parser.parser.add_argument(
+        '-t', '--title',
+        help='set title.',
+    )
+    parser.parser.add_argument(
+        '-xla', '--xlabel',
+        help='set xlabel.',
+    )
+    parser.parser.add_argument(
+        '-yla', '--ylabel',
+        help='set ylabel.'
+    )
+    parser.parser.add_argument(
+        '-xli', '--xlim',
+        help='set x limits',
+    )
+    parser.parser.add_argument(
+        '-yli', '--ylim',
+        help='set y limits',
     )
     parser.args = parser.parser.parse_args()
     if parser.args.export:

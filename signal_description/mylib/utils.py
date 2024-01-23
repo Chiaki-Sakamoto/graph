@@ -32,21 +32,21 @@ def _judge_positive_power(exponent):
 
 
 def _judge_negative_power(exponent):
-    if -3 <= exponent and exponent <= -2:
+    if -4 <= exponent and exponent <= -2:
         return (3, 'm')
-    elif -6 <= exponent and exponent <= -4:
+    elif -7 <= exponent and exponent <= -5:
         return (6, 'μ')
-    elif -9 <= exponent and exponent <= -7:
+    elif -10 <= exponent and exponent <= -8:
         return (9, 'n')
-    elif -12 <= exponent and exponent <= -10:
+    elif -13 <= exponent and exponent <= -11:
         return (12, 'p')
-    elif -15 <= exponent and exponent <= -11:
+    elif -16 <= exponent and exponent <= -12:
         return (15, 'f')
-    elif -18 <= exponent and exponent <= -12:
+    elif -19 <= exponent and exponent <= -13:
         return (18, 'a')
-    elif -21 <= exponent and exponent <= -19:
+    elif -22 <= exponent and exponent <= -20:
         return (21, 'z')
-    elif -24 <= exponent and exponent <= -22:
+    elif -25 <= exponent and exponent <= -23:
         return (24, 'y')
     else:
         return (None, None)
