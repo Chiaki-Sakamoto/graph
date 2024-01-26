@@ -18,6 +18,12 @@ class AD_LIST:
         self.ad_zband = Z_band_ad
 
 
+class BAND_AD_LIST:
+    def __init__(self, f200_ad, f400_ad, f800_ad):
+        self.ad_f200 = f200_ad
+        self.ad_f400 = f400_ad
+        self.ad_f800 = f800_ad
+
 def _init_angle_distribution(band_path):
     angle_distribution = dict()
     for index, path in enumerate(band_path):
@@ -99,27 +105,35 @@ def main():
         _sort_angle_distribution(_init_angle_distribution(f800_path.yband)),
         _sort_angle_distribution(_init_angle_distribution(f800_path.zband)),
     )
-    for focal in ("200mm", "400mm", "800mm"):
+    for band in ("G-band", "Y-band", "Z-band"):
         fig, axs = plt.subplots(layout="tight")
-        if focal == "200mm":
-            focal_ad = f200_ad
-        if focal == "400mm":
-            focal_ad = f400_ad
-        if focal == "800mm":
-            focal_ad = f800_ad
-        for band in ("G-band", "Y-band", "Z-band"):
-            if band == "G-band":
-                focal_band_ad = focal_ad.ad_gband
+        axs.set_xlabel("Angle (degree)")
+        axs.set_ylabel("Signal voltage (mV)")
+        axs.set_xlim(-35, 35)
+        axs.set_xticks(np.arange(-35, 36, 5))
+        if band == "G-band":
+            axs.set_ylim(0, 35)
+            axs.set_title("0.14 ~ 0.22 THz")
+            focal_ad_list = BAND_AD_LIST(f200_ad.ad_gband, f400_ad.ad_gband, f800_ad.ad_gband)
+        if band == "Y-band":
+            axs.set_ylim(0, 25)
+            axs.set_title("0.22 ~ 0.33 THz")
+            focal_ad_list = BAND_AD_LIST(f200_ad.ad_yband, f400_ad.ad_yband, f800_ad.ad_yband)
+        if band == "Z-band":
+            axs.set_ylim(0, 3)
+            axs.set_title("0.33 ~ 0.50 THz")
+            focal_ad_list = BAND_AD_LIST(f200_ad.ad_zband, f400_ad.ad_zband, f800_ad.ad_zband)
+        for focal in ("200mm", "400mm", "800mm"):
+            if focal == "200mm":
+                focal_band_ad = focal_ad_list.ad_f200
                 color = 'r'
-                label = "0.14 ~ 0.22 THz"
-            if band == "Y-band":
-                focal_band_ad = focal_ad.ad_yband
+            if focal == "400mm":
+                focal_band_ad = focal_ad_list.ad_f400
                 color = 'g'
-                label = "0.22 ~ 0.33 THz"
-            if band == "Z-band":
-                focal_band_ad = focal_ad.ad_zband
+            if focal == "800mm":
+                focal_band_ad = focal_ad_list.ad_f800
                 color = 'b'
-                label = "0.33 ~ 0.50 THz"
+            label = "f = " + focal
             x = np.array(list(focal_band_ad.keys()))
             y = np.array(list(focal_band_ad.values()))
             axs.plot(
@@ -127,12 +141,12 @@ def main():
                 y * 10 ** 3,
                 color + 'o',
                 label=label,
-                )
-        axs.legend(
-            bbox_to_anchor=(1.32, 1),
-            loc='upper right',
-            borderaxespad=0
             )
+        axs.legend(
+            bbox_to_anchor=(1.25, 1),
+            loc="upper right",
+            borderaxespad=0
+        )
         plt.show()
         plt.close()
 
