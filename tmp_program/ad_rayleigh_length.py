@@ -12,17 +12,11 @@ class BAND_PATH:
 
 
 class AD_LIST:
-    def __init__(self, G_band_ad, Y_band_ad, Z_band_ad):
-        self.ad_gband = G_band_ad
-        self.ad_yband = Y_band_ad
-        self.ad_zband = Z_band_ad
+    def __init__(self, F200_ad, F400_ad, F800_ad):
+        self.ad_f200 = F200_ad
+        self.ad_f400 = F400_ad
+        self.ad_f800 = F800_ad
 
-
-class BAND_AD_LIST:
-    def __init__(self, f200_ad, f400_ad, f800_ad):
-        self.ad_f200 = f200_ad
-        self.ad_f400 = f400_ad
-        self.ad_f800 = f800_ad
 
 def _init_angle_distribution(band_path):
     angle_distribution = dict()
@@ -90,48 +84,41 @@ def main():
     f200_path = BAND_PATH(*branch_band_path(focal_path["f200mm"]))
     f400_path = BAND_PATH(*branch_band_path(focal_path["f400mm"]))
     f800_path = BAND_PATH(*branch_band_path(focal_path["f800mm"]))
-    f200_ad = AD_LIST(
-        _sort_angle_distribution(_init_angle_distribution(f200_path.gband)),
-        _sort_angle_distribution(_init_angle_distribution(f200_path.yband)),
-        _sort_angle_distribution(_init_angle_distribution(f200_path.zband)),
-    )
-    f400_ad = AD_LIST(
-        _sort_angle_distribution(_init_angle_distribution(f400_path.gband)),
-        _sort_angle_distribution(_init_angle_distribution(f400_path.yband)),
-        _sort_angle_distribution(_init_angle_distribution(f400_path.zband)),
-    )
-    f800_ad = AD_LIST(
-        _sort_angle_distribution(_init_angle_distribution(f800_path.gband)),
-        _sort_angle_distribution(_init_angle_distribution(f800_path.yband)),
-        _sort_angle_distribution(_init_angle_distribution(f800_path.zband)),
-    )
-    for band in ("G-band", "Y-band", "Z-band"):
+    for band in ("gband", "yband", "zband"):
         fig, axs = plt.subplots(layout="tight")
         axs.set_xlabel("Angle (degree)")
         axs.set_ylabel("Signal voltage (mV)")
         axs.set_xlim(-35, 35)
         axs.set_xticks(np.arange(-35, 36, 5))
-        if band == "G-band":
+        if band == "gband":
             axs.set_ylim(0, 35)
             axs.set_title("0.14 ~ 0.22 THz")
-            focal_ad_list = BAND_AD_LIST(f200_ad.ad_gband, f400_ad.ad_gband, f800_ad.ad_gband)
-        if band == "Y-band":
+        if band == "yband":
             axs.set_ylim(0, 25)
             axs.set_title("0.22 ~ 0.33 THz")
-            focal_ad_list = BAND_AD_LIST(f200_ad.ad_yband, f400_ad.ad_yband, f800_ad.ad_yband)
-        if band == "Z-band":
+        if band == "zband":
             axs.set_ylim(0, 3)
             axs.set_title("0.33 ~ 0.50 THz")
-            focal_ad_list = BAND_AD_LIST(f200_ad.ad_zband, f400_ad.ad_zband, f800_ad.ad_zband)
+        band_ad_list = AD_LIST(
+            _sort_angle_distribution(
+                _init_angle_distribution(getattr(f200_path, band))
+                ),
+            _sort_angle_distribution(
+                _init_angle_distribution(getattr(f400_path, band))
+                ),
+            _sort_angle_distribution(
+                _init_angle_distribution(getattr(f800_path, band))
+                ),
+        )
         for focal in ("200mm", "400mm", "800mm"):
             if focal == "200mm":
-                focal_band_ad = focal_ad_list.ad_f200
+                focal_band_ad = band_ad_list.ad_f200
                 color = 'r'
             if focal == "400mm":
-                focal_band_ad = focal_ad_list.ad_f400
+                focal_band_ad = band_ad_list.ad_f400
                 color = 'g'
             if focal == "800mm":
-                focal_band_ad = focal_ad_list.ad_f800
+                focal_band_ad = band_ad_list.ad_f800
                 color = 'b'
             label = "f = " + focal
             x = np.array(list(focal_band_ad.keys()))
