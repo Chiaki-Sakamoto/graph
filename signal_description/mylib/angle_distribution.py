@@ -85,8 +85,8 @@ def angle_distribution_main(parser, graph):
         graph.x * 10 ** x_exponent,
         graph.y * 10 ** y_exponent, 'o'
         )
-    axs.set_xlabel("Angle (°)")
-    axs.set_ylabel(f"Signal Voltage ({y_si_prefix}V)")
+    axs.set_xlabel("Angle (°)", fontsize=30)
+    axs.set_ylabel(f"Signal Voltage ({y_si_prefix}V)", fontsize=30)
     if parser.args.export:
         plt.savefig('/tmp/' + "angle_distribution" + '.pdf', format='pdf')
         print("export angle_distribution.pdf in /tmp\n")

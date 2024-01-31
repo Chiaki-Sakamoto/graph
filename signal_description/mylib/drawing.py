@@ -17,9 +17,9 @@ from .utils import normalize
 
 def _judge_norm_ylabel(norm_flag, y_si_prefix):
     if norm_flag:
-        plt.ylabel("Signal Voltage (arb.units)")
+        plt.ylabel("Signal Voltage (arb.units)", fontsize=30)
     else:
-        plt.ylabel(f"Signal Voltage ({y_si_prefix}V)")
+        plt.ylabel(f"Signal Voltage ({y_si_prefix}V)", fontsize=30)
 
 
 def _change_notation(parser, graph):
@@ -48,8 +48,8 @@ def _plot_graph(parser, axs, row, col, graph):
         graph.y * 10 ** y_exponent
         )
     axs[row, col].set_title(title)
-    axs[row, col].set_xlabel(f"Time ({x_si_prefix}s)")
-    axs[row, col].set_ylabel(f"Signal Voltage ({y_si_prefix}V)")
+    axs[row, col].set_xlabel(f"Time ({x_si_prefix}s)", fontsize=30)
+    axs[row, col].set_ylabel(f"Signal Voltage ({y_si_prefix}V)", fontsize=30)
 
 
 def _show_single_graph(parser, graph):
@@ -71,7 +71,7 @@ def _show_single_graph(parser, graph):
         graph.y *= -1
     plt.plot(graph.x * 10 ** x_exponent, graph.y * 10 ** y_exponent)
     plt.title(graph.title)
-    plt.xlabel(f"Time ({x_si_prefix}s)")
+    plt.xlabel(f"Time ({x_si_prefix}s)", fontsize=30)
     _judge_norm_ylabel(parser.args.normalization, y_si_prefix)
     print(f"show {graph.title}")
     plt.show()

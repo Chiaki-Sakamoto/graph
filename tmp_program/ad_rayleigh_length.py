@@ -51,13 +51,13 @@ def _sort_angle_distribution(angle_distribution):
 def _branch_set_band_fig(band, axs):
     if band == "gband":
         axs.set_ylim(0, 35)
-        axs.set_title("0.14 ~ 0.22 THz")
+        axs.set_title("0.14 ~ 0.22 THz", fontsize=30, pad=20)
     if band == "yband":
         axs.set_ylim(0, 25)
-        axs.set_title("0.22 ~ 0.33 THz")
+        axs.set_title("0.22 ~ 0.33 THz", fontsize=30, pad=20)
     if band == "zband":
         axs.set_ylim(0, 3)
-        axs.set_title("0.33 ~ 0.50 THz")
+        axs.set_title("0.33 ~ 0.50 THz", fontsize=30, pad=20)
 
 
 def _plot_focal_band_ad(band_ad_list, axs):
@@ -88,8 +88,8 @@ def _plot_focal_band_ad(band_ad_list, axs):
 
 
 def _set_label_limit(axs):
-    axs.set_xlabel("Angle (degree)")
-    axs.set_ylabel("Signal voltage (mV)")
+    axs.set_xlabel("Angle (degree)", fontsize=30)
+    axs.set_ylabel("Signal voltage (mV)", fontsize=30)
     axs.set_xlim(-35, 35)
     axs.set_xticks(np.arange(-35, 36, 5))
 
@@ -132,6 +132,8 @@ def main():
     f800_path = BAND_PATH(*branch_band_path(focal_path["f800mm"]))
     for band in ("gband", "yband", "zband"):
         fig, axs = plt.subplots(layout="tight")
+        axs.get_xaxis().set_tick_params(pad=15)
+        axs.get_yaxis().set_tick_params(pad=5)
         _set_label_limit(axs)
         _branch_set_band_fig(band, axs)
         band_ad_list = AD_LIST(
@@ -146,6 +148,10 @@ def main():
                 ),
         )
         _plot_focal_band_ad(band_ad_list, axs)
+        plt.savefig(
+            "/tmp/" + f"{band}_ad_rayleigh_length" + ".pdf",
+            format="pdf"
+            )
         plt.show()
         plt.close()
 

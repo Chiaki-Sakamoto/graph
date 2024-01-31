@@ -73,13 +73,16 @@ def main():
             color + '-',
             linewidth=3,
         )
-    axs.set_xlabel("Rayleigh length ratio")
-    axs.set_ylabel("Signal voltage (mV)")
+    axs.set_xlabel("Rayleigh length ratio", fontsize=30)
+    axs.set_ylabel("Signal voltage (mV)", fontsize=30)
     axs.set_xlim(0, 20)
     axs.set_ylim(0, 35)
     axs.set_xticks(np.arange(0, 21, 5))
     axs.set_yticks(np.arange(0, 36, 5))
-    axs.legend(bbox_to_anchor=(1.32, 1), loc='upper right', borderaxespad=0)
+    axs.get_xaxis().set_tick_params(pad=15)
+    axs.get_yaxis().set_tick_params(pad=5)
+    axs.legend(bbox_to_anchor=(1.36, 1), loc='upper right', borderaxespad=0)
+    plt.savefig("/tmp/" + "rayleigh_length_ratio" + ".pdf", format="pdf")
     plt.show()
     plt.close()
 

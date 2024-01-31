@@ -47,8 +47,8 @@ def export_signal(parser, graph):
             graph.y *= -1
         axs.plot(graph.x * 10 ** x_exponent, graph.y * 10 ** y_exponent)
         axs.set_title(graph.title)
-        axs.set_xlabel(f"Time ({x_si_prefix}s)")
-        axs.set_ylabel(f"Signal Voltage ({y_si_prefix}V)")
+        axs.set_xlabel(f"Time ({x_si_prefix}s)", fontsize=30)
+        axs.set_ylabel(f"Signal Voltage ({y_si_prefix}V)", fontsize=30)
         if parser.args.output:
             plt.savefig(
                 parser.args.output + graph.title + '.pdf',
