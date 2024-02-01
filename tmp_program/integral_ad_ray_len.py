@@ -3,6 +3,7 @@ import sys
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import curve_fit
+from scipy.integrate import quad
 
 
 class BAND_PATH:
@@ -59,67 +60,38 @@ def _sort_angle_distribution(angle_distribution):
     return sorted_angle_distribution
 
 
-def _branch_set_band_fig(band, axs):
-    if band == "gband":
-        axs.set_ylim(0, 35)
-        axs.set_title("0.14 ~ 0.22 THz", fontsize=30, pad=20)
-    if band == "yband":
-        axs.set_ylim(0, 25)
-        axs.set_title("0.22 ~ 0.33 THz", fontsize=30, pad=20)
-    if band == "zband":
-        axs.set_ylim(0, 3)
-        axs.set_title("0.33 ~ 0.50 THz", fontsize=30, pad=20)
-
-
-def _plot_focal_band_ad(band_ad_list, band, axs):
+def _integral_gaussian_fitting(band_ad_list, band, integral_value):
     for focal in ("200mm", "400mm", "800mm"):
         if focal == "200mm":
             focal_band_ad = band_ad_list.ad_f200
-            color = 'r'
         if focal == "400mm":
             focal_band_ad = band_ad_list.ad_f400
-            color = 'g'
         if focal == "800mm":
             focal_band_ad = band_ad_list.ad_f800
-            color = 'b'
-        label = "f = " + focal
         x_list = list(focal_band_ad.keys())
         y_list = list(focal_band_ad.values())
-        x = np.array(x_list)
-        y = np.array(y_list)
-        peak_index = np.argmax(y)
-        peak_value = np.max(y) * 10 ** 3
-        std = np.std(y * 10 ** 3)
+        ad_x = np.array(x_list)
+        ad_y = np.array(y_list)
+        peak_index = np.argmax(ad_y)
+        peak_value = np.max(ad_y) * 10 ** 3
+        std = np.std(ad_y * 10 ** 3)
         print(f"std{std}, peak_index{peak_index}, peak_value{peak_value}")
-        gauss_fit = fit(gauss, x, y * 10 ** 3, [peak_value, peak_index, std])
-        fit_x = np.linspace(min(x) - 5, max(x) + 5, 1000)
-        fit_y = gauss(fit_x, *gauss_fit[0])
         if not (band == "zband" and focal == "200mm"):
-            axs.plot(
-                fit_x,
-                fit_y,
-                color + '-',
-                linewidth=2,
-                )
-        axs.plot(
-            x,
-            y * 10 ** 3,
-            color + 'o',
-            label=label,
-        )
-    axs.legend(
-        bbox_to_anchor=(1.25, 1),
-        loc="upper right",
-        borderaxespad=0
-    )
+            gauss_fit = fit(gauss, ad_x, ad_y * 10 ** 3, [peak_value, peak_index, std])
+            lower_limit = min(ad_x)
+            uper_limit = max(ad_x)
+            area, _ = quad(gauss, lower_limit, uper_limit, args=(gauss_fit[0][0], gauss_fit[0][1], gauss_fit[0][2]))
+            integral_value.append(area)
 
 
 def _set_label_limit(axs):
-    axs.set_xlabel("Angle (degree)", fontsize=30)
-    axs.set_xlim(-35, 35)
-    axs.set_xticks(np.arange(-35, 36, 5))
+    axs.set_xlabel("Rayleigh length rato", fontsize=30)
+    axs.set_xlim(0, 20)
+    axs.set_xticks(np.arange(0, 21, 5))
     axs.get_xaxis().set_tick_params(pad=15)
     axs.set_ylabel("Signal voltage (mV)", fontsize=30)
+    axs.set_ylim(0, 700)
+    axs.set_yticks(np.arange(0, 701, 100))
     axs.get_yaxis().set_tick_params(pad=5)
 
 
@@ -159,10 +131,20 @@ def main():
     f200_path = BAND_PATH(*branch_band_path(focal_path["f200mm"]))
     f400_path = BAND_PATH(*branch_band_path(focal_path["f400mm"]))
     f800_path = BAND_PATH(*branch_band_path(focal_path["f800mm"]))
+    x = [1, 4, 16]
+    fig, axs = plt.subplots(layout="tight")
     for band in ("gband", "yband", "zband"):
-        fig, axs = plt.subplots(layout="tight")
+        integral_value = list()
+        if band == "gband":
+            color = 'r'
+            label = "0.14 ~ 0.22 THz"
+        if band == "yband":
+            color = 'g'
+            label = "0.22 ~ 0.33 THz"
+        if band == "zband":
+            color = 'b'
+            label = "0.33 ~ 0.50 THz"
         _set_label_limit(axs)
-        _branch_set_band_fig(band, axs)
         band_ad_list = AD_LIST(
             _sort_angle_distribution(
                 _init_angle_distribution(getattr(f200_path, band))
@@ -174,10 +156,23 @@ def main():
                 _init_angle_distribution(getattr(f800_path, band))
                 ),
         )
-        _plot_focal_band_ad(band_ad_list, band, axs)
-        plt.savefig("/tmp/" + band + "_gaussian_fitting_ad_ray_len.pdf", format="pdf")
-        plt.show()
-        plt.close()
+        _integral_gaussian_fitting(band_ad_list, band, integral_value)
+        if band == "zband":
+            x = [4, 16]
+        axs.plot(
+            x,
+            integral_value,
+            color + 'o',
+            label=label,
+            )
+    axs.legend(
+        bbox_to_anchor=(1.38, 1),
+        loc="upper right",
+        borderaxespad=0
+        )
+    plt.savefig("/tmp/" + "integral_ad_ray_len.pdf", format="pdf")
+    plt.show()
+    plt.close()
 
 
 if __name__ == "__main__":
