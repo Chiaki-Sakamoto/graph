@@ -44,7 +44,7 @@ def _init_angle_distribution(band_path):
         time, signal = np.loadtxt(
             path, skiprows=3, unpack=True, delimiter=','
             )
-        max_signal = -min(signal)
+        max_signal = -signal
         angle_distribution[angle] = max_signal
     return angle_distribution
 
@@ -76,16 +76,18 @@ def _integral_gaussian_fitting(band_ad_list, band, integral_value):
         peak_value = np.max(ad_y) * 10 ** 3
         std = np.std(ad_y * 10 ** 3)
         print(f"std{std}, peak_index{peak_index}, peak_value{peak_value}")
-        if not (band == "zband" and focal == "200mm"):
+        if focal == "200mm" and band == "zband":
+            gauss_fit = fit(gauss, ad_x, ad_y * 10 ** 3, [peak_value, peak_index, 0.6])
+        else:
             gauss_fit = fit(gauss, ad_x, ad_y * 10 ** 3, [peak_value, peak_index, std])
-            lower_limit = min(ad_x)
-            uper_limit = max(ad_x)
-            area, _ = quad(gauss, lower_limit, uper_limit, args=(gauss_fit[0][0], gauss_fit[0][1], gauss_fit[0][2]))
-            integral_value.append(area)
+        lower_limit = min(ad_x)
+        uper_limit = max(ad_x)
+        area, _ = quad(gauss, lower_limit, uper_limit, args=(gauss_fit[0][0], gauss_fit[0][1], gauss_fit[0][2]))
+        integral_value.append(area)
 
 
 def _set_label_limit(axs):
-    axs.set_xlabel("Rayleigh length rato", fontsize=30)
+    axs.set_xlabel("Normalized rayleigh length", fontsize=30)
     axs.set_xlim(0, 20)
     axs.set_xticks(np.arange(0, 21, 5))
     axs.get_xaxis().set_tick_params(pad=15)
@@ -157,16 +159,26 @@ def main():
                 ),
         )
         _integral_gaussian_fitting(band_ad_list, band, integral_value)
-        if band == "zband":
-            x = [4, 16]
+        slope, intercept = np.polyfit(
+            np.array(x),
+            np.array(integral_value),
+            1,
+        )
+        x_array = np.array(range(21))
         axs.plot(
             x,
             integral_value,
             color + 'o',
             label=label,
             )
+        axs.plot(
+            x_array,
+            x_array * slope + intercept,
+            color + '-',
+            linewidth=3,
+        )
     axs.legend(
-        bbox_to_anchor=(1.38, 1),
+        bbox_to_anchor=(0.32, 0.95),
         loc="upper right",
         borderaxespad=0
         )

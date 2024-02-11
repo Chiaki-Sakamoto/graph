@@ -32,7 +32,7 @@ def _init_angle_distribution(band_path):
         time, signal = np.loadtxt(
             path, skiprows=3, unpack=True, delimiter=','
             )
-        max_signal = -min(signal)
+        max_signal = -signal
         angle_distribution[angle] = max_signal
     return angle_distribution
 
@@ -81,7 +81,7 @@ def _plot_focal_band_ad(band_ad_list, axs):
             label=label,
         )
     axs.legend(
-        bbox_to_anchor=(1.25, 1),
+        bbox_to_anchor=(0.24, 0.95),
         loc="upper right",
         borderaxespad=0
     )

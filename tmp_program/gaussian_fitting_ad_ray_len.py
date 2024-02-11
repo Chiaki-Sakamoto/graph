@@ -43,7 +43,7 @@ def _init_angle_distribution(band_path):
         time, signal = np.loadtxt(
             path, skiprows=3, unpack=True, delimiter=','
             )
-        max_signal = -min(signal)
+        max_signal = -signal
         angle_distribution[angle] = max_signal
     return angle_distribution
 
@@ -53,7 +53,7 @@ def _sort_angle_distribution(angle_distribution):
         sorted(
             angle_distribution.items(),
             key=lambda x: x[0],
-            reverse=True
+            reverse=False
             )
         )
     return sorted_angle_distribution
@@ -91,16 +91,18 @@ def _plot_focal_band_ad(band_ad_list, band, axs):
         peak_value = np.max(y) * 10 ** 3
         std = np.std(y * 10 ** 3)
         print(f"std{std}, peak_index{peak_index}, peak_value{peak_value}")
-        gauss_fit = fit(gauss, x, y * 10 ** 3, [peak_value, peak_index, std])
+        if focal == "200mm" and band == "zband":
+            gauss_fit = fit(gauss, x, y * 10 ** 3, [peak_value, peak_index, 0.6])
+        else:
+            gauss_fit = fit(gauss, x, y * 10 ** 3, [peak_value, peak_index, std])
         fit_x = np.linspace(min(x) - 5, max(x) + 5, 1000)
         fit_y = gauss(fit_x, *gauss_fit[0])
-        if not (band == "zband" and focal == "200mm"):
-            axs.plot(
-                fit_x,
-                fit_y,
-                color + '-',
-                linewidth=2,
-                )
+        axs.plot(
+            fit_x,
+            fit_y,
+            color + '-',
+            linewidth=2,
+            )
         axs.plot(
             x,
             y * 10 ** 3,
@@ -108,7 +110,7 @@ def _plot_focal_band_ad(band_ad_list, band, axs):
             label=label,
         )
     axs.legend(
-        bbox_to_anchor=(1.25, 1),
+        bbox_to_anchor=(0.24, 0.95),
         loc="upper right",
         borderaxespad=0
     )

@@ -129,13 +129,12 @@ def main():
             gauss_fit = fit(gauss, x, y * 10 ** 3, [np.max(y) * 10 ** 3, np.argmax(y), np.std(y * 10 ** 3)])
             fit_x = np.linspace(min(x) - 5, max(x) + 5, 1000)
             fit_y = gauss(fit_x, *gauss_fit[0])
-            if not (band == "zband" and length == "10mm"):
-                axs.plot(
-                    fit_x,
-                    fit_y,
-                    color + '-',
-                    linewidth=2,
-                    )
+            axs.plot(
+                fit_x,
+                fit_y,
+                color + '-',
+                linewidth=2,
+                )
             axs.plot(
                 x,
                 y * 10 ** 3,

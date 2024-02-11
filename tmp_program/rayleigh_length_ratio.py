@@ -26,7 +26,7 @@ def _get_max_rayleigh_length_ratio(path_in_200, path_in_400, path_in_800):
             time, signal = np.loadtxt(
                 path, skiprows=3, unpack=True, delimiter=','
             )
-            peak_signal = -min(signal)
+            peak_signal = -signal
             if peak_signal > max_signal:
                 max_signal = peak_signal
         result.append(max_signal)
@@ -73,7 +73,7 @@ def main():
             color + '-',
             linewidth=3,
         )
-    axs.set_xlabel("Rayleigh length ratio", fontsize=30)
+    axs.set_xlabel("Normalized rayleigh length", fontsize=30)
     axs.set_ylabel("Signal voltage (mV)", fontsize=30)
     axs.set_xlim(0, 20)
     axs.set_ylim(0, 35)
@@ -81,7 +81,7 @@ def main():
     axs.set_yticks(np.arange(0, 36, 5))
     axs.get_xaxis().set_tick_params(pad=15)
     axs.get_yaxis().set_tick_params(pad=5)
-    axs.legend(bbox_to_anchor=(1.36, 1), loc='upper right', borderaxespad=0)
+    axs.legend(bbox_to_anchor=(0.34, 0.95), loc='upper right', borderaxespad=0)
     plt.savefig("/tmp/" + "rayleigh_length_ratio" + ".pdf", format="pdf")
     plt.show()
     plt.close()

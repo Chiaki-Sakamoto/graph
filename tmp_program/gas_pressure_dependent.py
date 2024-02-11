@@ -75,32 +75,33 @@ def main():
         x = np.array(list(sorted_pd_band.keys()))
         y = np.array(list(sorted_pd_band.values()))
         axs.plot(
-            x / 100,
+            x * 10,
             y * 10 ** 3, color + 'o',
             label=label,
         )
         slope, intercept = np.polyfit(
-            x / 100,
+            x * 10,
             y * 10 ** 3,
             1,
         )
-        x_array = np.arange(5, 75, 2.5)
+        x_array = np.arange(50, 750, 10)
         axs.plot(
-            x_array / 100,
-            x_array / 100 * slope + intercept,
+            x_array,
+            x_array * slope + intercept,
             color + '-', linewidth=3,
         )
-    axs.set_xticklabels(axs.get_xticks(), rotation=20)
-    axs.xaxis.set_major_formatter(StrMethodFormatter('{x:.3f}'))
-    axs.set_xlim(0.050, 0.275)
-    axs.set_xticks(np.arange(0.050, 0.276, 0.025))
+    # axs.set_xticklabels(axs.get_xticks(), rotation=20)
+    # axs.xaxis.set_major_formatter(StrMethodFormatter('{x:.2f}'))
+    axs.set_xlim(50, 270)
+    axs.set_xticks(np.arange(50, 271, 20))
+    axs.get_xaxis().set_tick_params(pad=15)
     axs.set_ylim(0, 60)
     axs.set_yticks(np.arange(0, 61, 10))
     axs.get_yaxis().set_tick_params(pad=15)
-    axs.set_xlabel("Pressure (MPa)", fontsize=30)
+    axs.set_xlabel("Pressure (kPa)", fontsize=30)
     axs.set_ylabel("Signal voltage (mV)", fontsize=30)
     axs.legend(
-        bbox_to_anchor=(1.40, 1),
+        bbox_to_anchor=(0.32, 0.95),
         loc="upper right",
         borderaxespad=0
     )
